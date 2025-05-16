@@ -1,0 +1,65 @@
+[
+  {
+    "objectID": "math-437-project-template.html#main-objective",
+    "href": "math-437-project-template.html#main-objective",
+    "title": "Replace this with an interesting title",
+    "section": "Main Objective",
+    "text": "Main Objective"
+  },
+  {
+    "objectID": "math-437-project-template.html#packages-used-in-this-analysis",
+    "href": "math-437-project-template.html#packages-used-in-this-analysis",
+    "title": "Replace this with an interesting title",
+    "section": "Packages Used In This Analysis",
+    "text": "Packages Used In This Analysis\n\nlibrary(here)\nlibrary(readr)\nlibrary(dplyr)\nlibrary(ggplot2)\nlibrary(rsample)\n\n\n\n\nPackage\nUse\n\n\n\n\nhere\nto easily load and save data\n\n\nreadr\nto import the CSV file data\n\n\ndplyr\nto massage and summarize data\n\n\nrsample\nto split data into training and test sets\n\n\nggplot2\nto create nice-looking and informative graphs"
+  },
+  {
+    "objectID": "math-437-project-template.html#data-description",
+    "href": "math-437-project-template.html#data-description",
+    "title": "Replace this with an interesting title",
+    "section": "Data Description",
+    "text": "Data Description\n\nData Limitations"
+  },
+  {
+    "objectID": "math-437-project-template.html#data-wrangling-optional-section",
+    "href": "math-437-project-template.html#data-wrangling-optional-section",
+    "title": "Replace this with an interesting title",
+    "section": "Data Wrangling (Optional Section)",
+    "text": "Data Wrangling (Optional Section)"
+  },
+  {
+    "objectID": "math-437-project-template.html#exploratory-data-analysis",
+    "href": "math-437-project-template.html#exploratory-data-analysis",
+    "title": "Replace this with an interesting title",
+    "section": "Exploratory Data Analysis",
+    "text": "Exploratory Data Analysis"
+  },
+  {
+    "objectID": "math-437-project-template.html#modeling",
+    "href": "math-437-project-template.html#modeling",
+    "title": "Replace this with an interesting title",
+    "section": "Modeling",
+    "text": "Modeling"
+  },
+  {
+    "objectID": "math-437-project-template.html#insights",
+    "href": "math-437-project-template.html#insights",
+    "title": "Replace this with an interesting title",
+    "section": "Insights",
+    "text": "Insights\n\nLimitations and Future Work\n\n\nReflection (Optional Subsection)"
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "About this site\n\n1 + 1\n\n[1] 2"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "M437 Final",
+    "section": "",
+    "text": "This is a Quarto website.\nTo learn more about Quarto websites visit https://quarto.org/docs/websites.\n\n1 + 1\n\n[1] 2"
+  }
+]
