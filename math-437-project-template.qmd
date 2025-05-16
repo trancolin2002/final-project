@@ -1,0 +1,61 @@
+---
+title: "Replace this with an interesting title"
+---
+
+## Motivation and Context
+
+```{r}
+#| label: do this first
+#| echo: false
+#| message: false
+
+# change this to the location of your Quarto file containing your project; then delete this comment
+here::i_am("math-437-project-template.qmd")
+```
+
+## Main Objective
+
+## Packages Used In This Analysis
+
+```{r}
+#| label: load packages
+#| message: false
+#| warning: false
+
+library(here)
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(rsample)
+```
+
+
+| Package | Use |
+|-------------------------------|----------------------------------------|
+| [here](https://github.com/jennybc/here_here) | to easily load and save data |
+| [readr](https://readr.tidyverse.org/) | to import the CSV file data |
+| [dplyr](https://dplyr.tidyverse.org/) | to massage and summarize data |
+| [rsample](https://rsample.tidymodels.org/) | to split data into training and test sets |
+| [ggplot2](https://ggplot2.tidyverse.org/) | to create nice-looking and informative graphs |
+
+## Data Description
+
+```{r}
+#| label: import data
+#| warning: false
+
+```
+
+### Data Limitations
+
+## Data Wrangling (Optional Section)
+
+## Exploratory Data Analysis
+
+## Modeling
+
+## Insights
+
+### Limitations and Future Work
+
+### Reflection (Optional Subsection)
