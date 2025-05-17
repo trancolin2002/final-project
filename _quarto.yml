@@ -11,6 +11,7 @@ website:
     left:
       - href: index.qmd
         text: Home
+    right:
       - href: math-437_project-template.qmd
         text: Project
     
