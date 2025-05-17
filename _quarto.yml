@@ -12,7 +12,7 @@ website:
       - href: index.qmd
         text: Home
     right:
-      - href: math-437_project-template.qmd
+      - href: math-437_project-template.html
         text: Project
     
 format:
