@@ -1,5 +1,9 @@
 project:
   type: website
+  output-dir: docs
+  render: 
+    - index.qmd
+    - math-437-project-template.qmd
 
 website:
   title: "M437 Final"
@@ -7,8 +11,9 @@ website:
     left:
       - href: index.qmd
         text: Home
-      - about.qmd
-
+      - href: math-437_project-template.qmd
+        text: Project
+    
 format:
   html:
     theme: cosmo

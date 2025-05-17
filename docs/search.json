@@ -2,49 +2,49 @@
   {
     "objectID": "math-437-project-template.html#main-objective",
     "href": "math-437-project-template.html#main-objective",
-    "title": "Replace this with an interesting title",
+    "title": "An Exploration of Medical Data",
     "section": "Main Objective",
     "text": "Main Objective"
   },
   {
     "objectID": "math-437-project-template.html#packages-used-in-this-analysis",
     "href": "math-437-project-template.html#packages-used-in-this-analysis",
-    "title": "Replace this with an interesting title",
+    "title": "An Exploration of Medical Data",
     "section": "Packages Used In This Analysis",
     "text": "Packages Used In This Analysis\n\nlibrary(here)\nlibrary(readr)\nlibrary(dplyr)\nlibrary(ggplot2)\nlibrary(rsample)\n\n\n\n\nPackage\nUse\n\n\n\n\nhere\nto easily load and save data\n\n\nreadr\nto import the CSV file data\n\n\ndplyr\nto massage and summarize data\n\n\nrsample\nto split data into training and test sets\n\n\nggplot2\nto create nice-looking and informative graphs"
   },
   {
     "objectID": "math-437-project-template.html#data-description",
     "href": "math-437-project-template.html#data-description",
-    "title": "Replace this with an interesting title",
+    "title": "An Exploration of Medical Data",
     "section": "Data Description",
     "text": "Data Description\nThis data was found\n\nreadr::read_csv(here::here(\"lung_disease_data.csv\"))\n\n# A tibble: 5,200 × 8\n     Age Gender `Smoking Status` `Lung Capacity` `Disease Type` `Treatment Type`\n   &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;                      &lt;dbl&gt; &lt;chr&gt;          &lt;chr&gt;           \n 1    71 Female No                          4.49 COPD           Therapy         \n 2    34 Female Yes                        NA    Bronchitis     Surgery         \n 3    80 Male   Yes                         1.95 COPD           &lt;NA&gt;            \n 4    40 Female Yes                        NA    Bronchitis     Medication      \n 5    43 Male   Yes                         4.6  COPD           Surgery         \n 6    22 Female No                          3.65 Bronchitis     Medication      \n 7    41 Male   Yes                         2.98 Asthma         Medication      \n 8    72 Male   &lt;NA&gt;                        2.61 Lung Cancer    Surgery         \n 9    21 Female No                          4.05 Lung Cancer    Medication      \n10    49 Male   Yes                         5.7  Pneumonia      Medication      \n# ℹ 5,190 more rows\n# ℹ 2 more variables: `Hospital Visits` &lt;dbl&gt;, Recovered &lt;chr&gt;\n\n\n\nData Limitations"
   },
   {
     "objectID": "math-437-project-template.html#data-wrangling-optional-section",
     "href": "math-437-project-template.html#data-wrangling-optional-section",
-    "title": "Replace this with an interesting title",
+    "title": "An Exploration of Medical Data",
     "section": "Data Wrangling (Optional Section)",
     "text": "Data Wrangling (Optional Section)"
   },
   {
     "objectID": "math-437-project-template.html#exploratory-data-analysis",
     "href": "math-437-project-template.html#exploratory-data-analysis",
-    "title": "Replace this with an interesting title",
+    "title": "An Exploration of Medical Data",
     "section": "Exploratory Data Analysis",
     "text": "Exploratory Data Analysis"
   },
   {
     "objectID": "math-437-project-template.html#modeling",
     "href": "math-437-project-template.html#modeling",
-    "title": "Replace this with an interesting title",
+    "title": "An Exploration of Medical Data",
     "section": "Modeling",
     "text": "Modeling"
   },
   {
     "objectID": "math-437-project-template.html#insights",
     "href": "math-437-project-template.html#insights",
-    "title": "Replace this with an interesting title",
+    "title": "An Exploration of Medical Data",
     "section": "Insights",
     "text": "Insights\n\nLimitations and Future Work\n\n\nReflection (Optional Subsection)"
   },

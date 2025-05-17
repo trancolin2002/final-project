@@ -1,5 +1,5 @@
 ---
-title: "Replace this with an interesting title"
+title: "An Exploration of Medical Data"
 ---
 
 ## Motivation and Context
@@ -29,9 +29,8 @@ library(ggplot2)
 library(rsample)
 ```
 
-
 | Package | Use |
-|-------------------------------|----------------------------------------|
+|--------------------------------|----------------------------------------|
 | [here](https://github.com/jennybc/here_here) | to easily load and save data |
 | [readr](https://readr.tidyverse.org/) | to import the CSV file data |
 | [dplyr](https://dplyr.tidyverse.org/) | to massage and summarize data |
@@ -40,10 +39,13 @@ library(rsample)
 
 ## Data Description
 
+This data was found
+
 ```{r}
 #| label: import data
 #| warning: false
 
+readr::read_csv(here::here("lung_disease_data.csv"))
 ```
 
 ### Data Limitations
