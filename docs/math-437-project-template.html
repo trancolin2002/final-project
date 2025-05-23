@@ -152,8 +152,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#data-description" id="toc-data-description" class="nav-link" data-scroll-target="#data-description">Data Description</a>
   <ul class="collapse">
   <li><a href="#data-limitations" id="toc-data-limitations" class="nav-link" data-scroll-target="#data-limitations">Data Limitations</a></li>
+  <li><a href="#data-wrangling-optional-section" id="toc-data-wrangling-optional-section" class="nav-link" data-scroll-target="#data-wrangling-optional-section"><strong>Data Wrangling (Optional Section)</strong></a></li>
   </ul></li>
-  <li><a href="#data-wrangling-optional-section" id="toc-data-wrangling-optional-section" class="nav-link" data-scroll-target="#data-wrangling-optional-section">Data Wrangling (Optional Section)</a></li>
   <li><a href="#exploratory-data-analysis" id="toc-exploratory-data-analysis" class="nav-link" data-scroll-target="#exploratory-data-analysis">Exploratory Data Analysis</a></li>
   <li><a href="#modeling" id="toc-modeling" class="nav-link" data-scroll-target="#modeling">Modeling</a></li>
   <li><a href="#insights" id="toc-insights" class="nav-link" data-scroll-target="#insights">Insights</a>
@@ -188,9 +188,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="motivation-and-context" class="level2">
 <h2 class="anchored" data-anchor-id="motivation-and-context">Motivation and Context</h2>
+<p>My original motivation for choosing this dataset was a personal interest in medicine. Additionally, I am likely to be working with health data in the future, as I have the goal of working in the insurance industry. This dataset contains information on patients with a</p>
 </section>
 <section id="main-objective" class="level2">
 <h2 class="anchored" data-anchor-id="main-objective">Main Objective</h2>
+<p>The main objective of this analysis is to predict the likelihood of recovery for a patient suffering from one of the listed lung conditions, given known factors such as age, smoking status, and lung capacity.</p>
 </section>
 <section id="packages-used-in-this-analysis" class="level2">
 <h2 class="anchored" data-anchor-id="packages-used-in-this-analysis">Packages Used In This Analysis</h2>
@@ -199,7 +201,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rsample)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rsample)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(naniar)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mice)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(parsnip)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(yardstick)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <table class="caption-top table">
 <thead>
@@ -229,41 +235,75 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td><a href="https://ggplot2.tidyverse.org/">ggplot2</a></td>
 <td>to create nice-looking and informative graphs</td>
 </tr>
+<tr class="even">
+<td><a href="https://naniar.njtierney.com/">naniar</a></td>
+<td>to summarize and visualize missing data</td>
+</tr>
+<tr class="odd">
+<td><a href="https://github.com/amices/mice">mice</a></td>
+<td>to impute missing values</td>
+</tr>
+<tr class="even">
+<td><a href="https://parsnip.tidymodels.org/">parsnip</a></td>
+<td>to create the model with the data</td>
+</tr>
+<tr class="odd">
+<td><a href="https://yardstick.tidymodels.org/">yardstick</a></td>
+<td>to measure the model’s performance</td>
+</tr>
 </tbody>
 </table>
 </section>
 <section id="data-description" class="level2">
 <h2 class="anchored" data-anchor-id="data-description">Data Description</h2>
-<p>This data was found</p>
+<p>This data was found on <a href="https://www.kaggle.com/datasets/samikshadalvi/lungs-diseases-dataset/data">Kaggle</a>, and was reportedly obtained via web scraping off of the websites of three lung clinics in the Indiana area.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>readr<span class="sc">::</span><span class="fu">read_csv</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"lung_disease_data.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 5,200 × 8
-     Age Gender `Smoking Status` `Lung Capacity` `Disease Type` `Treatment Type`
-   &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;                      &lt;dbl&gt; &lt;chr&gt;          &lt;chr&gt;           
- 1    71 Female No                          4.49 COPD           Therapy         
- 2    34 Female Yes                        NA    Bronchitis     Surgery         
- 3    80 Male   Yes                         1.95 COPD           &lt;NA&gt;            
- 4    40 Female Yes                        NA    Bronchitis     Medication      
- 5    43 Male   Yes                         4.6  COPD           Surgery         
- 6    22 Female No                          3.65 Bronchitis     Medication      
- 7    41 Male   Yes                         2.98 Asthma         Medication      
- 8    72 Male   &lt;NA&gt;                        2.61 Lung Cancer    Surgery         
- 9    21 Female No                          4.05 Lung Cancer    Medication      
-10    49 Male   Yes                         5.7  Pneumonia      Medication      
-# ℹ 5,190 more rows
-# ℹ 2 more variables: `Hospital Visits` &lt;dbl&gt;, Recovered &lt;chr&gt;</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>lung_disease <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"lung_disease_data.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="data-limitations" class="level3">
 <h3 class="anchored" data-anchor-id="data-limitations">Data Limitations</h3>
+<p>There are many limitations as to the effectiveness of this data in modeling a general population. The data itself was collected through questionable methods with little documentation, and was possibly even synthesized. Other factors, such as the unusual distribution of patient ages and the uniformity of the recovery rates across different diseases, which will be explored shortly, provide further support for the possibility.</p>
 </section>
+<section id="data-wrangling-optional-section" class="level3">
+<h3 class="anchored" data-anchor-id="data-wrangling-optional-section"><strong>Data Wrangling (Optional Section)</strong></h3>
+<p>The only data wrangling that this dataset requires is separation of the training and test sets, and accounting the missing values. The latter will be done after the EDA, to determine whether they should be imputed or omitted, and how, while the former must be done after the missing values are accounted for.</p>
 </section>
-<section id="data-wrangling-optional-section" class="level2">
-<h2 class="anchored" data-anchor-id="data-wrangling-optional-section">Data Wrangling (Optional Section)</h2>
 </section>
 <section id="exploratory-data-analysis" class="level2">
 <h2 class="anchored" data-anchor-id="exploratory-data-analysis">Exploratory Data Analysis</h2>
+<p>We will first look at the missing parts of the data, to determine if there are any visible patterns or correlations in the missing data points that will be informative. A simple plot shows that the data seems to be missing at random, with little correlation between variables. Such a uniform distribution of missing values is not consistent with real-life data collection.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">vis_miss</span>(lung_disease)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="math-437-project-template_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>There are a few other inconsistencies in this dataset, which can be seen when examining the data more closely. A look at the recovery rates for each disease shows the following:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>lung_disease <span class="sc">%&gt;%</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Recovered,<span class="st">`</span><span class="at">Disease Type</span><span class="st">`</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">na.omit</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">count</span>(Recovered, <span class="st">`</span><span class="at">Disease Type</span><span class="st">`</span>) <span class="sc">%&gt;%</span>   </span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(<span class="st">`</span><span class="at">Disease Type</span><span class="st">`</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">percent_recovered =</span> <span class="fu">prop.table</span>(n) <span class="sc">*</span> <span class="dv">100</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Recovered <span class="sc">==</span> <span class="st">"Yes"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 4
+# Groups:   Disease Type [5]
+  Recovered `Disease Type`     n percent_recovered
+  &lt;chr&gt;     &lt;chr&gt;          &lt;int&gt;             &lt;dbl&gt;
+1 Yes       Asthma           485              51.6
+2 Yes       Bronchitis       456              47.7
+3 Yes       COPD             509              53.8
+4 Yes       Lung Cancer      461              52.5
+5 Yes       Pneumonia        432              48.2</code></pre>
+</div>
+</div>
+<p>We can see that the proportion of patients who successfully recovered is approximately 50% for each disease. This is, of course, inconsistent with the real-life rates of recovery for these diseases.</p>
 </section>
 <section id="modeling" class="level2">
 <h2 class="anchored" data-anchor-id="modeling">Modeling</h2>

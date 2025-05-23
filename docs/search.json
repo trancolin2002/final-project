@@ -4,21 +4,21 @@
     "href": "math-437-project-template.html#main-objective",
     "title": "An Exploration of Medical Data",
     "section": "Main Objective",
-    "text": "Main Objective"
+    "text": "Main Objective\nThe main objective of this analysis is to predict the likelihood of recovery for a patient suffering from one of the listed lung conditions, given known factors such as age, smoking status, and lung capacity."
   },
   {
     "objectID": "math-437-project-template.html#packages-used-in-this-analysis",
     "href": "math-437-project-template.html#packages-used-in-this-analysis",
     "title": "An Exploration of Medical Data",
     "section": "Packages Used In This Analysis",
-    "text": "Packages Used In This Analysis\n\nlibrary(here)\nlibrary(readr)\nlibrary(dplyr)\nlibrary(ggplot2)\nlibrary(rsample)\n\n\n\n\nPackage\nUse\n\n\n\n\nhere\nto easily load and save data\n\n\nreadr\nto import the CSV file data\n\n\ndplyr\nto massage and summarize data\n\n\nrsample\nto split data into training and test sets\n\n\nggplot2\nto create nice-looking and informative graphs"
+    "text": "Packages Used In This Analysis\n\nlibrary(here)\nlibrary(readr)\nlibrary(dplyr)\nlibrary(ggplot2)\nlibrary(rsample)\nlibrary(naniar)\nlibrary(mice)\nlibrary(parsnip)\nlibrary(yardstick)\n\n\n\n\nPackage\nUse\n\n\n\n\nhere\nto easily load and save data\n\n\nreadr\nto import the CSV file data\n\n\ndplyr\nto massage and summarize data\n\n\nrsample\nto split data into training and test sets\n\n\nggplot2\nto create nice-looking and informative graphs\n\n\nnaniar\nto summarize and visualize missing data\n\n\nmice\nto impute missing values\n\n\nparsnip\nto create the model with the data\n\n\nyardstick\nto measure the model’s performance"
   },
   {
     "objectID": "math-437-project-template.html#data-description",
     "href": "math-437-project-template.html#data-description",
     "title": "An Exploration of Medical Data",
     "section": "Data Description",
-    "text": "Data Description\nThis data was found\n\nreadr::read_csv(here::here(\"lung_disease_data.csv\"))\n\n# A tibble: 5,200 × 8\n     Age Gender `Smoking Status` `Lung Capacity` `Disease Type` `Treatment Type`\n   &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;                      &lt;dbl&gt; &lt;chr&gt;          &lt;chr&gt;           \n 1    71 Female No                          4.49 COPD           Therapy         \n 2    34 Female Yes                        NA    Bronchitis     Surgery         \n 3    80 Male   Yes                         1.95 COPD           &lt;NA&gt;            \n 4    40 Female Yes                        NA    Bronchitis     Medication      \n 5    43 Male   Yes                         4.6  COPD           Surgery         \n 6    22 Female No                          3.65 Bronchitis     Medication      \n 7    41 Male   Yes                         2.98 Asthma         Medication      \n 8    72 Male   &lt;NA&gt;                        2.61 Lung Cancer    Surgery         \n 9    21 Female No                          4.05 Lung Cancer    Medication      \n10    49 Male   Yes                         5.7  Pneumonia      Medication      \n# ℹ 5,190 more rows\n# ℹ 2 more variables: `Hospital Visits` &lt;dbl&gt;, Recovered &lt;chr&gt;\n\n\n\nData Limitations"
+    "text": "Data Description\nThis data was found on Kaggle, and was reportedly obtained via web scraping off of the websites of three lung clinics in the Indiana area.\n\nlung_disease &lt;- readr::read_csv(here::here(\"lung_disease_data.csv\"))\n\n\nData Limitations\nThere are many limitations as to the effectiveness of this data in modeling a general population. The data itself was collected through questionable methods with little documentation, and was possibly even synthesized. Other factors, such as the unusual distribution of patient ages and the uniformity of the recovery rates across different diseases, which will be explored shortly, provide further support for the possibility.\n\n\nData Wrangling (Optional Section)\nThe only data wrangling that this dataset requires is separation of the training and test sets, and accounting the missing values. The latter will be done after the EDA, to determine whether they should be imputed or omitted, and how, while the former must be done after the missing values are accounted for."
   },
   {
     "objectID": "math-437-project-template.html#data-wrangling-optional-section",
@@ -32,7 +32,7 @@
     "href": "math-437-project-template.html#exploratory-data-analysis",
     "title": "An Exploration of Medical Data",
     "section": "Exploratory Data Analysis",
-    "text": "Exploratory Data Analysis"
+    "text": "Exploratory Data Analysis\nWe will first look at the missing parts of the data, to determine if there are any visible patterns or correlations in the missing data points that will be informative. A simple plot shows that the data seems to be missing at random, with little correlation between variables. Such a uniform distribution of missing values is not consistent with real-life data collection.\n\nvis_miss(lung_disease)\n\n\n\n\n\n\n\n\nThere are a few other inconsistencies in this dataset, which can be seen when examining the data more closely. A look at the recovery rates for each disease shows the following:\n\nlung_disease %&gt;%\n  select(Recovered,`Disease Type`) %&gt;% \n    na.omit() %&gt;% \n    count(Recovered, `Disease Type`) %&gt;%   \n    group_by(`Disease Type`) %&gt;%\n    mutate(percent_recovered = prop.table(n) * 100) %&gt;%\n  filter(Recovered == \"Yes\")\n\n# A tibble: 5 × 4\n# Groups:   Disease Type [5]\n  Recovered `Disease Type`     n percent_recovered\n  &lt;chr&gt;     &lt;chr&gt;          &lt;int&gt;             &lt;dbl&gt;\n1 Yes       Asthma           485              51.6\n2 Yes       Bronchitis       456              47.7\n3 Yes       COPD             509              53.8\n4 Yes       Lung Cancer      461              52.5\n5 Yes       Pneumonia        432              48.2\n\n\nWe can see that the proportion of patients who successfully recovered is approximately 50% for each disease. This is, of course, inconsistent with the real-life rates of recovery for these diseases."
   },
   {
     "objectID": "math-437-project-template.html#modeling",
@@ -54,5 +54,19 @@
     "title": "M437 Final",
     "section": "",
     "text": "This is a Quarto website.\nTo learn more about Quarto websites visit https://quarto.org/docs/websites.\n\n1 + 1\n\n[1] 2"
+  },
+  {
+    "objectID": "math-437-project-template.html",
+    "href": "math-437-project-template.html",
+    "title": "An Exploration of Medical Data",
+    "section": "",
+    "text": "My original motivation for choosing this dataset was a personal interest in medicine. Additionally, I am likely to be working with health data in the future, as I have the goal of working in the insurance industry. This dataset contains information on patients with a"
+  },
+  {
+    "objectID": "math-437-project-template.html#motivation-and-context",
+    "href": "math-437-project-template.html#motivation-and-context",
+    "title": "An Exploration of Medical Data",
+    "section": "",
+    "text": "My original motivation for choosing this dataset was a personal interest in medicine. Additionally, I am likely to be working with health data in the future, as I have the goal of working in the insurance industry. This dataset contains information on patients with a"
   }
 ]
