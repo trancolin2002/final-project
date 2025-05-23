@@ -152,14 +152,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#data-description" id="toc-data-description" class="nav-link" data-scroll-target="#data-description">Data Description</a>
   <ul class="collapse">
   <li><a href="#data-limitations" id="toc-data-limitations" class="nav-link" data-scroll-target="#data-limitations">Data Limitations</a></li>
-  <li><a href="#data-wrangling-optional-section" id="toc-data-wrangling-optional-section" class="nav-link" data-scroll-target="#data-wrangling-optional-section"><strong>Data Wrangling (Optional Section)</strong></a></li>
+  <li><a href="#data-wrangling" id="toc-data-wrangling" class="nav-link" data-scroll-target="#data-wrangling"><strong>Data Wrangling</strong></a></li>
   </ul></li>
-  <li><a href="#exploratory-data-analysis" id="toc-exploratory-data-analysis" class="nav-link" data-scroll-target="#exploratory-data-analysis">Exploratory Data Analysis</a></li>
+  <li><a href="#exploratory-data-analysis" id="toc-exploratory-data-analysis" class="nav-link" data-scroll-target="#exploratory-data-analysis">Exploratory Data Analysis</a>
+  <ul class="collapse">
+  <li><a href="#data-wrangling-continued" id="toc-data-wrangling-continued" class="nav-link" data-scroll-target="#data-wrangling-continued">Data Wrangling (Continued)</a></li>
+  </ul></li>
   <li><a href="#modeling" id="toc-modeling" class="nav-link" data-scroll-target="#modeling">Modeling</a></li>
   <li><a href="#insights" id="toc-insights" class="nav-link" data-scroll-target="#insights">Insights</a>
   <ul class="collapse">
   <li><a href="#limitations-and-future-work" id="toc-limitations-and-future-work" class="nav-link" data-scroll-target="#limitations-and-future-work">Limitations and Future Work</a></li>
-  <li><a href="#reflection-optional-subsection" id="toc-reflection-optional-subsection" class="nav-link" data-scroll-target="#reflection-optional-subsection">Reflection (Optional Subsection)</a></li>
+  <li><a href="#section" id="toc-section" class="nav-link" data-scroll-target="#section"></a></li>
   </ul></li>
   </ul>
 </nav>
@@ -188,7 +191,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="motivation-and-context" class="level2">
 <h2 class="anchored" data-anchor-id="motivation-and-context">Motivation and Context</h2>
-<p>My original motivation for choosing this dataset was a personal interest in medicine. Additionally, I am likely to be working with health data in the future, as I have the goal of working in the insurance industry. This dataset contains information on patients with a</p>
+<p>My original motivation for choosing this dataset was a personal interest in medicine. Additionally, I am likely to be working with health data in the future, as I have the goal of working in the insurance industry. This dataset contains information on patients with a number of different lung diseases: Asthma, Bronchitis, COPD, Lung Cancer, and Pneumonia.</p>
 </section>
 <section id="main-objective" class="level2">
 <h2 class="anchored" data-anchor-id="main-objective">Main Objective</h2>
@@ -264,38 +267,54 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 class="anchored" data-anchor-id="data-limitations">Data Limitations</h3>
 <p>There are many limitations as to the effectiveness of this data in modeling a general population. The data itself was collected through questionable methods with little documentation, and was possibly even synthesized. Other factors, such as the unusual distribution of patient ages and the uniformity of the recovery rates across different diseases, which will be explored shortly, provide further support for the possibility.</p>
 </section>
-<section id="data-wrangling-optional-section" class="level3">
-<h3 class="anchored" data-anchor-id="data-wrangling-optional-section"><strong>Data Wrangling (Optional Section)</strong></h3>
-<p>The only data wrangling that this dataset requires is separation of the training and test sets, and accounting the missing values. The latter will be done after the EDA, to determine whether they should be imputed or omitted, and how, while the former must be done after the missing values are accounted for.</p>
+<section id="data-wrangling" class="level3">
+<h3 class="anchored" data-anchor-id="data-wrangling"><strong>Data Wrangling</strong></h3>
+<p>This dataset requires separation of the training and test sets, and accounting for the missing values. The latter will be done after the EDA, to determine whether they should be imputed or omitted, and how, while the former must be done after the missing values are accounted for. For now, the categorical variables will be made into factors for ease of processing.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>lung_disease<span class="sc">$</span>Gender <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(lung_disease<span class="sc">$</span>Gender)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>lung_disease<span class="sc">$</span><span class="st">`</span><span class="at">Smoking Status</span><span class="st">`</span><span class="ot">&lt;-</span> <span class="fu">as.factor</span>(lung_disease<span class="sc">$</span><span class="st">`</span><span class="at">Smoking Status</span><span class="st">`</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>lung_disease<span class="sc">$</span>Recovered <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(lung_disease<span class="sc">$</span>Recovered) </span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>lung_disease<span class="sc">$</span><span class="st">`</span><span class="at">Disease Type</span><span class="st">`</span><span class="ot">&lt;-</span> <span class="fu">as.factor</span>(lung_disease<span class="sc">$</span><span class="st">`</span><span class="at">Disease Type</span><span class="st">`</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>lung_disease<span class="sc">$</span><span class="st">`</span><span class="at">Treatment Type</span><span class="st">`</span> <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(lung_disease<span class="sc">$</span><span class="st">`</span><span class="at">Treatment Type</span><span class="st">`</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
 </section>
 <section id="exploratory-data-analysis" class="level2">
 <h2 class="anchored" data-anchor-id="exploratory-data-analysis">Exploratory Data Analysis</h2>
-<p>We will first look at the missing parts of the data, to determine if there are any visible patterns or correlations in the missing data points that will be informative. A simple plot shows that the data seems to be missing at random, with little correlation between variables. Such a uniform distribution of missing values is not consistent with real-life data collection.</p>
+<p>We will first look at the missing parts of the data, to determine if there are any visible patterns or correlations in the missing data points that will be informative. A simple plot shows that the data seems to be missing at random, with little correlation between variables. Utilizing a test for randomness reveals the same. Such a uniform distribution of missing values is highly inconsistent with real-life data collection, and another point in favor of this data being synthetic, or at least highly flawed in its collection. However, the fact that the data is missing completely at random means that data can be imputed without fear of greatly affecting the resulting model.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">vis_miss</span>(lung_disease)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mcar_test</span>(lung_disease)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 4
+  statistic    df p.value missing.patterns
+      &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;            &lt;int&gt;
+1      370.   391   0.770               71</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">vis_miss</span>(lung_disease)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="math-437-project-template_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="math-437-project-template_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>There are a few other inconsistencies in this dataset, which can be seen when examining the data more closely. A look at the recovery rates for each disease shows the following:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>lung_disease <span class="sc">%&gt;%</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Recovered,<span class="st">`</span><span class="at">Disease Type</span><span class="st">`</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">na.omit</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">count</span>(Recovered, <span class="st">`</span><span class="at">Disease Type</span><span class="st">`</span>) <span class="sc">%&gt;%</span>   </span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(<span class="st">`</span><span class="at">Disease Type</span><span class="st">`</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">percent_recovered =</span> <span class="fu">prop.table</span>(n) <span class="sc">*</span> <span class="dv">100</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Recovered <span class="sc">==</span> <span class="st">"Yes"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>lung_disease <span class="sc">%&gt;%</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Recovered,<span class="st">`</span><span class="at">Disease Type</span><span class="st">`</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">na.omit</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">count</span>(Recovered, <span class="st">`</span><span class="at">Disease Type</span><span class="st">`</span>) <span class="sc">%&gt;%</span>   </span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(<span class="st">`</span><span class="at">Disease Type</span><span class="st">`</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">percent_recovered =</span> <span class="fu">prop.table</span>(n) <span class="sc">*</span> <span class="dv">100</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Recovered <span class="sc">==</span> <span class="st">"Yes"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 5 × 4
 # Groups:   Disease Type [5]
   Recovered `Disease Type`     n percent_recovered
-  &lt;chr&gt;     &lt;chr&gt;          &lt;int&gt;             &lt;dbl&gt;
+  &lt;fct&gt;     &lt;fct&gt;          &lt;int&gt;             &lt;dbl&gt;
 1 Yes       Asthma           485              51.6
 2 Yes       Bronchitis       456              47.7
 3 Yes       COPD             509              53.8
@@ -304,17 +323,81 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>We can see that the proportion of patients who successfully recovered is approximately 50% for each disease. This is, of course, inconsistent with the real-life rates of recovery for these diseases.</p>
+<p>Despite the data being inconsistent with reality, it is the data we have, so we will model with it, as a demonstration of the modeling techniques. Before we do so, we will look for any correlation between the variables.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pairs</span>(lung_disease)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="math-437-project-template_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The scatter plots here do not show any obvious relationships between two variables, with any patterns simply being from the limited number of values for the categorical variables. We would expect some level of correlation between some variables, such as smoking being associated with lung cancer and COPD. the fcat that this is not the case is yet another limitation for our data.</p>
+<section id="data-wrangling-continued" class="level3">
+<h3 class="anchored" data-anchor-id="data-wrangling-continued">Data Wrangling (Continued)</h3>
+<p>With the EDA complete, the imputation as well as the creation of the training and test sets can be done.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># | echo: false</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1337</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>lung_impute <span class="ot">&lt;-</span> <span class="fu">mice</span>(lung_disease, <span class="at">m =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+ iter imp variable
+  1   1  Age  Gender  Smoking Status  Lung Capacity  Disease Type  Treatment Type  Hospital Visits  Recovered
+  2   1  Age  Gender  Smoking Status  Lung Capacity  Disease Type  Treatment Type  Hospital Visits  Recovered
+  3   1  Age  Gender  Smoking Status  Lung Capacity  Disease Type  Treatment Type  Hospital Visits  Recovered
+  4   1  Age  Gender  Smoking Status  Lung Capacity  Disease Type  Treatment Type  Hospital Visits  Recovered
+  5   1  Age  Gender  Smoking Status  Lung Capacity  Disease Type  Treatment Type  Hospital Visits  Recovered</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>lung_final <span class="ot">&lt;-</span> <span class="fu">complete</span>(lung_impute,<span class="dv">1</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>lung_split<span class="ot">&lt;-</span> <span class="fu">initial_split</span>(lung_final,<span class="at">prop =</span> <span class="fl">0.8</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>lung_train <span class="ot">&lt;-</span> <span class="fu">training</span>(lung_split)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>lung_test <span class="ot">&lt;-</span> <span class="fu">testing</span>(lung_split)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
 </section>
 <section id="modeling" class="level2">
 <h2 class="anchored" data-anchor-id="modeling">Modeling</h2>
+<p>For this model, we will use multiple logistic regression, since that is the simplest model that fits our needs. The data is suited for it, with all the predictors being mostly independent.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>lung_model <span class="ot">&lt;-</span> <span class="fu">logistic_reg</span>(<span class="at">mode =</span> <span class="st">"classification"</span>, <span class="at">engine =</span> <span class="st">"glm"</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>lung_fit <span class="ot">&lt;-</span> <span class="fu">fit</span>(lung_model, Recovered <span class="sc">~</span> Age <span class="sc">+</span> Gender <span class="sc">+</span> <span class="st">`</span><span class="at">Smoking Status</span><span class="st">`</span> <span class="sc">+</span> <span class="st">`</span><span class="at">Lung Capacity</span><span class="st">`</span> <span class="sc">+</span> <span class="st">`</span><span class="at">Disease Type</span><span class="st">`</span> <span class="sc">+</span> <span class="st">`</span><span class="at">Treatment Type</span><span class="st">`</span> <span class="sc">+</span> <span class="st">`</span><span class="at">Hospital Visits</span><span class="st">`</span>, <span class="at">data =</span> lung_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>In order to measure the effectiveness of our model, we will use the AUROC, or the area under the receiver operating characteristic curve. It is a robust measure that is well-suited to binary classification models such as ours.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>lung_predictions <span class="ot">&lt;-</span> <span class="fu">predict.glm</span>(lung_fit<span class="sc">$</span>fit, <span class="at">newdata =</span> lung_test, <span class="at">type =</span> <span class="st">"response"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>lung_pred <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(lung_predictions, lung_test<span class="sc">$</span>Recovered)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">roc_curve</span>(lung_pred,lung_test.Recovered,lung_predictions) <span class="sc">%&gt;%</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="dv">1</span> <span class="sc">-</span> specificity, <span class="at">y =</span> sensitivity)) <span class="sc">+</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_path</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="math-437-project-template_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">roc_auc</span>(lung_pred,lung_test.Recovered,lung_predictions)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 3
+  .metric .estimator .estimate
+  &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
+1 roc_auc binary         0.518</code></pre>
+</div>
+</div>
 </section>
 <section id="insights" class="level2">
 <h2 class="anchored" data-anchor-id="insights">Insights</h2>
+<p>This</p>
 <section id="limitations-and-future-work" class="level3">
 <h3 class="anchored" data-anchor-id="limitations-and-future-work">Limitations and Future Work</h3>
 </section>
-<section id="reflection-optional-subsection" class="level3">
-<h3 class="anchored" data-anchor-id="reflection-optional-subsection">Reflection (Optional Subsection)</h3>
+<section id="section" class="level3">
+<h3 class="anchored" data-anchor-id="section"></h3>
 
 
 </section>
