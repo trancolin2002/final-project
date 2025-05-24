@@ -371,17 +371,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>lung_pred <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(lung_predictions, lung_test<span class="sc">$</span>Recovered)</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">roc_curve</span>(lung_pred,lung_test.Recovered,lung_predictions) <span class="sc">%&gt;%</span></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="dv">1</span> <span class="sc">-</span> specificity, <span class="at">y =</span> sensitivity)) <span class="sc">+</span></span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_path</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="math-437-project-template_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">roc_auc</span>(lung_pred,lung_test.Recovered,lung_predictions)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">roc_auc</span>(lung_pred,lung_test.Recovered,lung_predictions)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 3
   .metric .estimator .estimate
@@ -389,12 +379,45 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 1 roc_auc binary         0.518</code></pre>
 </div>
 </div>
+<p>The measure of 0.517 indicates that our model is not very effective at predicting the the likelihood of recovery, being only slightly better than random chance. This is possibly due to the choice in model, but it is more likely to be caused by the dataset, as there is very little correlation between the variables, even the response and the predictors.</p>
 </section>
 <section id="insights" class="level2">
 <h2 class="anchored" data-anchor-id="insights">Insights</h2>
-<p>This</p>
+<p>In the process of analyzing and modeling this dataset, we have found that in the case of this set of data, factors such as age, smoking status, and lung capacity are poor predictors of the likelihood of recovery for a lung disease patient.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(<span class="fu">summary</span>(lung_fit<span class="sc">$</span>fit))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                               Estimate  Std. Error    z value   Pr(&gt;|z|)
+(Intercept)                0.0595922573 0.157171354  0.3791547 0.70457299
+Age                        0.0008538912 0.001539796  0.5545484 0.57920361
+GenderMale                -0.0644952231 0.062321492 -1.0348793 0.30072527
+`Smoking Status`Yes       -0.0379053467 0.062376578 -0.6076856 0.54339603
+`Lung Capacity`            0.0045654651 0.021345190  0.2138873 0.83063494
+`Disease Type`Bronchitis  -0.1803862568 0.097929800 -1.8419956 0.06547580
+`Disease Type`COPD         0.1521118934 0.097279988  1.5636504 0.11789969
+`Disease Type`Lung Cancer  0.2030574741 0.099689271  2.0369040 0.04165966
+`Disease Type`Pneumonia   -0.0610242874 0.099226557 -0.6149995 0.53855502
+`Treatment Type`Surgery   -0.0521917571 0.076432014 -0.6828520 0.49470034
+`Treatment Type`Therapy    0.1275435157 0.075900822  1.6803970 0.09288010
+`Hospital Visits`         -0.0098744535 0.007723485 -1.2784972 0.20107418</code></pre>
+</div>
+</div>
+<p>As we can see from this table of coefficients, the p-values of each coefficient, even uncorrected, are very low, which tells us that it is very uncertain whether the predictor variables have any influence on the response at all.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">roc_curve</span>(lung_pred,lung_test.Recovered,lung_predictions) <span class="sc">%&gt;%</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="dv">1</span> <span class="sc">-</span> specificity, <span class="at">y =</span> sensitivity)) <span class="sc">+</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_path</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="math-437-project-template_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
 <section id="limitations-and-future-work" class="level3">
 <h3 class="anchored" data-anchor-id="limitations-and-future-work">Limitations and Future Work</h3>
+<p>This analysis, while a functional demonstration of data analysis and modeling techniques, has not produced any results that are applicable to other real world applications. Even in the context of its own dataset, the model is a poor predictor, being only marginally better than random chance. The dataset itself was poorly documented in its collection, if it was even collected as all. The performance of this model is evidence that any model can only be as effective as the data used to train it, and this data was completely ineffective.</p>
 </section>
 <section id="section" class="level3">
 <h3 class="anchored" data-anchor-id="section"></h3>
